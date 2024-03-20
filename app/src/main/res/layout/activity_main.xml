@@ -11,19 +11,19 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/title"
+        app:srcCompat="@drawable/game_title"
          />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/robot"
+        app:srcCompat="@drawable/rabbit"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
-        android:fontFamily="@font/planetbe"
+        android:fontFamily="@font/b04"
         android:textSize="32sp"
         android:textColor="@android:color/white"
         android:backgroundTint="#bb8044"
