@@ -42,6 +42,13 @@ public class Water {
         }
     }
 
+    public synchronized void increaseWater() {
+        // If water reaches 0, end the game
+        if (waterLevel != 10) {
+            waterLevel++;
+        }
+    }
+
     private void endGame() {
         // Stop the water thread
         isRunning = false;
