@@ -38,9 +38,9 @@ public class GameView extends View{
     Paint healthPaint = new Paint(); //render the player's health bar
     float TEXT_SIZE = 120; //size of text on screen
     int points = 0; //player score
-    int life = 10; //remaining lives
+    int water = 10; //remaining lives
     // Calculate the width of the health bar based on remaining lives
-    int healthBarWidth = 60 * life;
+    int healthBarWidth = 60 * water;
     static int dWidth, dHeight; //width and height of the game's display
     Random random; //generate random numbers for certain game
     float robotX, robotY; //position of player character
@@ -48,6 +48,10 @@ public class GameView extends View{
     float oldRobotX; //character's position on previous frame
     ArrayList<Spike> spikes;
     ArrayList<Explosion> explosions;
+    private Thread waterThread;
+    private boolean isRunning = true;
+    private final long LIFE_DECREASE_INTERVAL = 5000; // Decrease water every 5 seconds
+
 
     public GameView(Context context) {
         super(context);
@@ -83,7 +87,6 @@ public class GameView extends View{
         runnable = new Runnable() {
             @Override
             public void run() {
-
                 invalidate(); //View method that invalidates the entire view, causing it to be redrawn on the next frame
             }
         };
@@ -103,6 +106,58 @@ public class GameView extends View{
         for (int i=0; i<3; i++){
             Spike spike = new Spike(context);
             spikes.add(spike);
+        }
+        startWaterThread();
+    }
+
+    private void startWaterThread() {
+        waterThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (isRunning) {
+                    try {
+                        Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
+                        decreaseWater(); // Decrease water after the interval
+                        System.out.println(water);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        waterThread.start(); // Start the thread
+    }
+
+    private synchronized void decreaseWater() {
+        // Decrease water by 1
+        water--;
+
+        // If water reaches 0, end the game
+        if (water <= 0) {
+            endGame();
+        }
+    }
+
+    private void endGame() {
+        // Stop the water thread
+        isRunning = false;
+
+        // Redirect to game over activity
+        Intent intent = new Intent(context, GameOver.class);
+        intent.putExtra("points", points);
+        context.startActivity(intent);
+        ((Activity) context).finish();
+    }
+
+    // Override onDetachedFromWindow to stop the thread when the view is detached
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        isRunning = false; // Stop the thread
+        try {
+            waterThread.join(); // Wait for the thread to finish
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -133,13 +188,12 @@ public class GameView extends View{
             }
         }
 
-        //if robot collides with any spikes, decrease the player's life by 1
+        //if robot collides with any spikes, decrease the player's water by 1
         for (int i=0; i < spikes.size(); i++){
             if (spikes.get(i).spikeX + spikes.get(i).getSpikeWidth() >= robotX
                     && spikes.get(i).spikeX <= robotX + robot.getWidth()
                     && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() >= robotY
                     && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() <= robotY + robot.getHeight()){
-                life--;
                 spikes.get(i).resetPosition();
                 //play explosion audio
                 mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.explosion );
@@ -163,13 +217,14 @@ public class GameView extends View{
 
 
 
-                //if player's life reach 0, redirect to game overview
-                if (life == 0){
+                //if player's water reach 0, redirect to game overview
+                if (water == 0){
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
                     context.startActivity(intent);
                     ((Activity) context).finish();
                 }
+                decreaseWater();
             }
         }
 
@@ -183,15 +238,14 @@ public class GameView extends View{
             }
         }
 
-        if (life == 4){
+        if (water == 4){
             healthPaint.setColor(Color.YELLOW);
-        } else if(life == 2){
+        } else if(water == 2){
             healthPaint.setColor(Color.RED);
         }
-        //draw player's score and life on canvas
+        //draw player's score and water on canvas
         // Draw the health bar
-        canvas.drawRect(dWidth - 200 - 60 * life, 30, dWidth - 200, 80, healthPaint);
-//        canvas.drawRect(dWidth-200, 30, dWidth-200+60*life, 80, healthPaint);
+        canvas.drawRect(dWidth - 200 - 60 * water, 30, dWidth - 200, 80, healthPaint);
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);
         //creates loop that updates the game state and draws the game screen repeatedly
         handler.postDelayed(runnable, UPDATE_MILLIS);
