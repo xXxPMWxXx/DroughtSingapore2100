@@ -235,7 +235,7 @@ public class GameView extends View{
                     }
                 }
                 //if player's water reach 0, redirect to game overview
-                if (water.getWaterLevel() <= 0) {
+                if (water.getWaterLevel() <= 1) {
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
                     context.startActivity(intent);
@@ -285,17 +285,26 @@ public class GameView extends View{
         } else if(water.getWaterLevel() == 2){
             healthPaint.setColor(Color.RED);
         }
-        //draw player's score and water on canvas
-        // Draw the health bar
 
-        canvas.drawRect(dWidth - 200 - 60 * water.getWaterLevel(), 30, dWidth - 100, 80, healthPaint);
+        // Variable to draw water level
+        int maxWaterLevel = 10;
+        int maxWidth = 225;
+        int padding = 100;
+        int currentWidth = (int) ((water.getWaterLevel() / (float) maxWaterLevel) * maxWidth);
+        // For rectangle
+        int right = dWidth - padding;
+        int left = right - currentWidth;
+
+        // Align water bar image with the rectangle
+        int x = right - waterBarBitmap.getWidth() + 80;
+
+        // Draw the bitmap first to ensure it's behind the rectangle
+        canvas.drawBitmap(waterBarBitmap, x, -125, null);
+        // Draw the water level
+        canvas.drawRect(left, 30, right, 65, healthPaint);
+        //draw score on canvas
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);
-        // Assuming waterBarBitmap is your loaded bitmap
-        int x = dWidth - 300;
-        int y = 30;
 
-        // Adjust the position where you want to draw the bitmap if necessary
-        canvas.drawBitmap(waterBarBitmap, x, y, null);
         //creates loop that updates the game state and draws the game screen repeatedly
         handler.postDelayed(runnable, UPDATE_MILLIS);
     }

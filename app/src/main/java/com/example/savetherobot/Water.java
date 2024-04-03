@@ -20,8 +20,9 @@ public class Water {
                 while (isRunning) {
                     try {
                         Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
-                        decreaseWater(); // Decrease water after the interval
-                        System.out.println(waterLevel);
+                        if(waterLevel != 1) {
+                            decreaseWater(); // Decrease water after the interval
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -35,7 +36,6 @@ public class Water {
     public synchronized void decreaseWater() {
         // Decrease water by 1
         waterLevel--;
-
         // If water reaches 0, end the game
         if (waterLevel <= 0) {
             endGame();
