@@ -1,5 +1,4 @@
 package com.example.savetherobot;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,9 +37,7 @@ public class GameView extends View{
     Paint healthPaint = new Paint(); //render the player's health bar
     float TEXT_SIZE = 120; //size of text on screen
     int points = 0; //player score
-    int water = 10; //remaining lives
-    // Calculate the width of the health bar based on remaining lives
-    int healthBarWidth = 60 * water;
+//    int water = 10; //remaining water
     static int dWidth, dHeight; //width and height of the game's display
     Random random; //generate random numbers for certain game
     float robotX, robotY; //position of player character
@@ -48,10 +45,10 @@ public class GameView extends View{
     float oldRobotX; //character's position on previous frame
     ArrayList<Spike> spikes;
     ArrayList<Explosion> explosions;
-    private Thread waterThread;
-    private boolean isRunning = true;
-    private final long LIFE_DECREASE_INTERVAL = 5000; // Decrease water every 5 seconds
 
+//    private final long LIFE_DECREASE_INTERVAL = 5000; // Decrease water every 5 seconds
+    private final Water water;
+    private final Thread waterThread;
 
     public GameView(Context context) {
         super(context);
@@ -107,53 +104,54 @@ public class GameView extends View{
             Spike spike = new Spike(context);
             spikes.add(spike);
         }
-        startWaterThread();
+        water = new Water(10); // Initial water level
+        waterThread = water.startWaterThread();
     }
 
-    private void startWaterThread() {
-        waterThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (isRunning) {
-                    try {
-                        Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
-                        decreaseWater(); // Decrease water after the interval
-                        System.out.println(water);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        waterThread.start(); // Start the thread
-    }
+//    private void startWaterThread() {
+//        waterThread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (isRunning) {
+//                    try {
+//                        Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
+//                        decreaseWater(); // Decrease water after the interval
+//                        System.out.println(water);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
+//        waterThread.start(); // Start the thread
+//    }
 
-    private synchronized void decreaseWater() {
-        // Decrease water by 1
-        water--;
+//    private synchronized void decreaseWater() {
+//        // Decrease water by 1
+//        water--;
+//
+//        // If water reaches 0, end the game
+//        if (water <= 0) {
+//            endGame();
+//        }
+//    }
 
-        // If water reaches 0, end the game
-        if (water <= 0) {
-            endGame();
-        }
-    }
-
-    private void endGame() {
-        // Stop the water thread
-        isRunning = false;
-
-        // Redirect to game over activity
-        Intent intent = new Intent(context, GameOver.class);
-        intent.putExtra("points", points);
-        context.startActivity(intent);
-        ((Activity) context).finish();
-    }
+//    private void endGame() {
+//        // Stop the water thread
+//        isRunning = false;
+//
+//        // Redirect to game over activity
+//        Intent intent = new Intent(context, GameOver.class);
+//        intent.putExtra("points", points);
+//        context.startActivity(intent);
+//        ((Activity) context).finish();
+//    }
 
     // Override onDetachedFromWindow to stop the thread when the view is detached
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        isRunning = false; // Stop the thread
+        water.stopWaterThread();
         try {
             waterThread.join(); // Wait for the thread to finish
         } catch (InterruptedException e) {
@@ -170,33 +168,33 @@ public class GameView extends View{
         canvas.drawBitmap(robot, robotX, robotY, null);
 
         //draw all spike on the canvas
-        for (int i=0; i<spikes.size(); i++){
-            canvas.drawBitmap(spikes.get(i).getSpike(spikes.get(i).spikeFrame), spikes.get(i).spikeX, spikes.get(i).spikeY, null);
-            spikes.get(i).spikeFrame++;
-            if (spikes.get(i).spikeFrame > 2){
-                spikes.get(i).spikeFrame = 0;
+        for (Spike spike : spikes) {
+            canvas.drawBitmap(spike.getSpike(spike.spikeFrame), spike.spikeX, spike.spikeY, null);
+            spike.spikeFrame++;
+            if (spike.spikeFrame > 2) {
+                spike.spikeFrame = 0;
             }
             //velocity & resets spike position
-            spikes.get(i).spikeY += spikes.get(i).spikeVelocity;
-            if (spikes.get(i).spikeY + spikes.get(i).getSpikeHeight() >= dHeight - ground.getHeight()){
+            spike.spikeY += spike.spikeVelocity;
+            if (spike.spikeY + spike.getSpikeHeight() >= dHeight - ground.getHeight()) {
                 points += 10;
                 Explosion explosion = new Explosion(context);
-                explosion.explosionX = spikes.get(i).spikeX;
-                explosion.explosionY = spikes.get(i).spikeY;
+                explosion.explosionX = spike.spikeX;
+                explosion.explosionY = spike.spikeY;
                 explosions.add(explosion);
-                spikes.get(i).resetPosition();
+                spike.resetPosition();
             }
         }
 
         //if robot collides with any spikes, decrease the player's water by 1
-        for (int i=0; i < spikes.size(); i++){
-            if (spikes.get(i).spikeX + spikes.get(i).getSpikeWidth() >= robotX
-                    && spikes.get(i).spikeX <= robotX + robot.getWidth()
-                    && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() >= robotY
-                    && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() <= robotY + robot.getHeight()){
-                spikes.get(i).resetPosition();
+        for (Spike spike : spikes) {
+            if (spike.spikeX + spike.getSpikeWidth() >= robotX
+                    && spike.spikeX <= robotX + robot.getWidth()
+                    && spike.spikeY + spike.getSpikeWidth() >= robotY
+                    && spike.spikeY + spike.getSpikeWidth() <= robotY + robot.getHeight()) {
+                spike.resetPosition();
                 //play explosion audio
-                mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.explosion );
+                mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.explosion);
                 if (mediaPlayer == null) {
                     Log.e("MediaPlayer", "Failed to create MediaPlayer.");
                 } else {
@@ -216,15 +214,14 @@ public class GameView extends View{
                 }
 
 
-
                 //if player's water reach 0, redirect to game overview
-                if (water == 0){
+                if (water.getWaterLevel() <= 0) {
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
                     context.startActivity(intent);
                     ((Activity) context).finish();
                 }
-                decreaseWater();
+                water.decreaseWater();
             }
         }
 
@@ -238,14 +235,14 @@ public class GameView extends View{
             }
         }
 
-        if (water == 4){
+        if (water.getWaterLevel() == 4){
             healthPaint.setColor(Color.YELLOW);
-        } else if(water == 2){
+        } else if(water.getWaterLevel() == 2){
             healthPaint.setColor(Color.RED);
         }
         //draw player's score and water on canvas
         // Draw the health bar
-        canvas.drawRect(dWidth - 200 - 60 * water, 30, dWidth - 200, 80, healthPaint);
+        canvas.drawRect(dWidth - 200 - 60 * water.getWaterLevel(), 30, dWidth - 200, 80, healthPaint);
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);
         //creates loop that updates the game state and draws the game screen repeatedly
         handler.postDelayed(runnable, UPDATE_MILLIS);
