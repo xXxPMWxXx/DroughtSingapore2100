@@ -9,10 +9,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.os.Vibrator;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -20,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Random;
 public class GameView extends View{
     Bitmap background, ground, robot; //display images in the game
+    private MediaPlayer mediaPlayer;
+
     Rect rectBackground, rectGround; //define position and size of background and size images
     Context context; //to retrieve resources and perform other task
     Handler handler; //schedule tasks to be run
@@ -43,11 +48,18 @@ public class GameView extends View{
     public GameView(Context context) {
         super(context);
         this.context = context;
+        mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.gamestart );
+        if (mediaPlayer == null) {
+            Log.e("MediaPlayer", "Failed to create MediaPlayer.");
+        } else {
+            mediaPlayer.start();
+        }
 
         //Load the background, ground, and robot Bitmap images from the app's resources
         background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
         ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
         robot = BitmapFactory.decodeResource(getResources(), R.drawable.robot_blue);
+
 
         //Get the device screen size
         Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
@@ -124,6 +136,12 @@ public class GameView extends View{
                     && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() <= robotY + robot.getHeight()){
                 life--;
                 spikes.get(i).resetPosition();
+                mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.explosion );
+                if (mediaPlayer == null) {
+                    Log.e("MediaPlayer", "Failed to create MediaPlayer.");
+                } else {
+                    mediaPlayer.start();
+                }
 
                 //if player's life reach 0, redirect to game overview
                 if (life == 0){
