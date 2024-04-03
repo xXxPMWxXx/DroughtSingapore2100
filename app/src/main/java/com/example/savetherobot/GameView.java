@@ -19,7 +19,7 @@ import androidx.core.content.res.ResourcesCompat;
 import java.util.ArrayList;
 import java.util.Random;
 public class GameView extends View{
-    Bitmap background, ground, rabbit; //display images in the game
+    Bitmap background, ground, robot; //display images in the game
     Rect rectBackground, rectGround; //define position and size of background and size images
     Context context; //to retrieve resources and perform other task
     Handler handler; //schedule tasks to be run
@@ -29,12 +29,14 @@ public class GameView extends View{
     Paint healthPaint = new Paint(); //render the player's health bar
     float TEXT_SIZE = 120; //size of text on screen
     int points = 0; //player score
-    int life = 3; //remaining lives
+    int life = 10; //remaining lives
+    // Calculate the width of the health bar based on remaining lives
+    int healthBarWidth = 60 * life;
     static int dWidth, dHeight; //width and height of the game's display
     Random random; //generate random numbers for certain game
-    float rabbitX, rabbitY; //position of player character
+    float robotX, robotY; //position of player character
     float oldX;
-    float oldRabbitX; //character's position on previous frame
+    float oldRobotX; //character's position on previous frame
     ArrayList<Spike> spikes;
     ArrayList<Explosion> explosions;
 
@@ -42,10 +44,10 @@ public class GameView extends View{
         super(context);
         this.context = context;
 
-        //Load the background, ground, and rabbit Bitmap images from the app's resources
+        //Load the background, ground, and robot Bitmap images from the app's resources
         background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
         ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
-        rabbit = BitmapFactory.decodeResource(getResources(), R.drawable.rabbit);
+        robot = BitmapFactory.decodeResource(getResources(), R.drawable.robot_blue);
 
         //Get the device screen size
         Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
@@ -73,12 +75,12 @@ public class GameView extends View{
         textPaint.setTextSize(TEXT_SIZE);
         textPaint.setTextAlign(Paint.Align.LEFT);
         textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.b04));
-        healthPaint.setColor(Color.GREEN);
+        healthPaint.setColor(Color.BLUE);
 
-        //initial position of the rabbit
+        //initial position of the robot
         random = new Random();
-        rabbitX = dWidth / 2 - rabbit.getWidth() / 2;
-        rabbitY = dHeight - ground.getHeight() - rabbit.getHeight();
+        robotX = dWidth / 2 - robot.getWidth() / 2;
+        robotY = dHeight - ground.getHeight() - robot.getHeight();
         spikes = new ArrayList<>();
         explosions = new ArrayList<>();
         for (int i=0; i<3; i++){
@@ -93,7 +95,7 @@ public class GameView extends View{
         super.onDraw(canvas);
         canvas.drawBitmap(background, null, rectBackground, null);
         canvas.drawBitmap(ground, null, rectGround, null);
-        canvas.drawBitmap(rabbit, rabbitX, rabbitY, null);
+        canvas.drawBitmap(robot, robotX, robotY, null);
 
         //draw all spike on the canvas
         for (int i=0; i<spikes.size(); i++){
@@ -114,16 +116,16 @@ public class GameView extends View{
             }
         }
 
-        //if rabbit collides with any spikes, decrease the player's life by 1
+        //if robot collides with any spikes, decrease the player's life by 1
         for (int i=0; i < spikes.size(); i++){
-            if (spikes.get(i).spikeX + spikes.get(i).getSpikeWidth() >= rabbitX
-                    && spikes.get(i).spikeX <= rabbitX + rabbit.getWidth()
-                    && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() >= rabbitY
-                    && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() <= rabbitY + rabbit.getHeight()){
+            if (spikes.get(i).spikeX + spikes.get(i).getSpikeWidth() >= robotX
+                    && spikes.get(i).spikeX <= robotX + robot.getWidth()
+                    && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() >= robotY
+                    && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() <= robotY + robot.getHeight()){
                 life--;
                 spikes.get(i).resetPosition();
 
-                //if player's life reach 0, redirect to game over view
+                //if player's life reach 0, redirect to game overview
                 if (life == 0){
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
@@ -143,13 +145,15 @@ public class GameView extends View{
             }
         }
 
-        if (life == 2){
+        if (life == 4){
             healthPaint.setColor(Color.YELLOW);
-        } else if(life == 1){
+        } else if(life == 2){
             healthPaint.setColor(Color.RED);
         }
         //draw player's score and life on canvas
-        canvas.drawRect(dWidth-200, 30, dWidth-200+60*life, 80, healthPaint);
+        // Draw the health bar
+        canvas.drawRect(dWidth - 200 - 60 * life, 30, dWidth - 200, 80, healthPaint);
+//        canvas.drawRect(dWidth-200, 30, dWidth-200+60*life, 80, healthPaint);
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);
         //creates loop that updates the game state and draws the game screen repeatedly
         handler.postDelayed(runnable, UPDATE_MILLIS);
@@ -162,27 +166,27 @@ public class GameView extends View{
         float touchX = event.getX();
         float touchY = event.getY();
 
-        //checks if the touch event occurred below the current y-coordinate of the rabbit, indicating that the touch to control the rabbit.
-        if (touchY >= rabbitY){
+        //checks if the touch event occurred below the current y-coordinate of the robot, indicating that the touch to control the robot.
+        if (touchY >= robotY){
             int action = event.getAction();
             if (action == MotionEvent.ACTION_DOWN){
                 oldX = event.getX();
-                oldRabbitX = rabbitX;
+                oldRobotX = robotX;
             }
             //if the action is a finger moving on the screen, the code calculates the horizontal shift of the finger
             if (action == MotionEvent.ACTION_MOVE){
                 float shift = oldX - touchX;
-                //calculates the new x-coordinate of the rabbit
-                float newRabbitX = oldRabbitX - shift;
-                //if the new position is less than or equal to 0, the rabbit is moved to the leftmost edge of the screen
-                if (newRabbitX <= 0)
-                    rabbitX = 0;
+                //calculates the new x-coordinate of the robot
+                float newRobotX = oldRobotX - shift;
+                //if the new position is less than or equal to 0, the robot is moved to the leftmost edge of the screen
+                if (newRobotX <= 0)
+                    robotX = 0;
                     //else to the right
-                else if(newRabbitX >= dWidth - rabbit.getWidth())
-                    rabbitX = dWidth - rabbit.getWidth();
+                else if(newRobotX >= dWidth - robot.getWidth())
+                    robotX = dWidth - robot.getWidth();
                 else
                     //or new position based on the finger shift
-                    rabbitX = newRabbitX;
+                    robotX = newRobotX;
             }
         }
         return true;
