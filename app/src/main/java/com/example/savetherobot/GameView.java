@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -35,6 +36,7 @@ public class GameView extends View{
     Runnable runnable; //update graphic
     Paint textPaint = new Paint(); //render text on screen
     Paint healthPaint = new Paint(); //render the player's health bar
+    Paint robotPaint = new Paint();
     float TEXT_SIZE = 120; //size of text on screen
     int points = 0; //player score
 //    int water = 10; //remaining water
@@ -60,7 +62,6 @@ public class GameView extends View{
         if (!isShaking) {
             isShaking = true;
             shakeStartTime = System.currentTimeMillis();
-
         }
     }
 
@@ -199,23 +200,23 @@ public class GameView extends View{
         super.onDraw(canvas);
 
         if (isShaking) {
-            // Check if the shake duration has elapsed
+            // Check the duration
             if (System.currentTimeMillis() - shakeStartTime < SHAKE_DURATION) {
-                // Randomly adjust robotX for shake effect
+                // For shaking effect
                 int shakeAmplitude = 20;
                 robotX += (random.nextInt(shakeAmplitude * 2) - shakeAmplitude);
+                robotPaint.setColorFilter(new LightingColorFilter(0xFFFFFF, 0xFFFF0000));
             } else {
                 // Stop shaking after the duration
                 isShaking = false;
+                robotPaint.setColorFilter(null);
             }
         }
 
-        // Now draw the robot with the potentially modified robotX
-        canvas.drawBitmap(robot, robotX, robotY, null);
-
         canvas.drawBitmap(background, null, rectBackground, null);
         canvas.drawBitmap(ground, null, rectGround, null);
-        canvas.drawBitmap(robot, robotX, robotY, null);
+
+        canvas.drawBitmap(robot, robotX, robotY, robotPaint);
         // Load the bitmap from drawable resources
         waterBarBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.water_bar);
 
