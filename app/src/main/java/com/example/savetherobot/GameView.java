@@ -51,6 +51,19 @@ public class GameView extends View{
     private final Water water;
     private final Thread waterThread;
 
+    // To make the robot shaking
+    private boolean isShaking = false;
+    private long shakeStartTime;
+    private final long SHAKE_DURATION = 800;
+
+    public void startShaking() {
+        if (!isShaking) {
+            isShaking = true;
+            shakeStartTime = System.currentTimeMillis();
+
+        }
+    }
+
     public GameView(Context context) {
         super(context);
         this.context = context;
@@ -184,6 +197,22 @@ public class GameView extends View{
     //responsible for drawing tha game screen
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if (isShaking) {
+            // Check if the shake duration has elapsed
+            if (System.currentTimeMillis() - shakeStartTime < SHAKE_DURATION) {
+                // Randomly adjust robotX for shake effect
+                int shakeAmplitude = 20;
+                robotX += (random.nextInt(shakeAmplitude * 2) - shakeAmplitude);
+            } else {
+                // Stop shaking after the duration
+                isShaking = false;
+            }
+        }
+
+        // Now draw the robot with the potentially modified robotX
+        canvas.drawBitmap(robot, robotX, robotY, null);
+
         canvas.drawBitmap(background, null, rectBackground, null);
         canvas.drawBitmap(ground, null, rectGround, null);
         canvas.drawBitmap(robot, robotX, robotY, null);
@@ -216,6 +245,7 @@ public class GameView extends View{
                     && spike.spikeY + spike.getSpikeWidth() >= robotY
                     && spike.spikeY + spike.getSpikeWidth() <= robotY + robot.getHeight()) {
                 spike.resetPosition();
+                startShaking();
                 //play explosion audio
                 mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.explosion);
                 if (mediaPlayer == null) {
