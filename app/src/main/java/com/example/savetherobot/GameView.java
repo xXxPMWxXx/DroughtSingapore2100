@@ -1,4 +1,6 @@
 package com.example.savetherobot;
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +12,9 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Handler;
+import android.os.VibrationEffect;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -48,6 +52,7 @@ public class GameView extends View{
     public GameView(Context context) {
         super(context);
         this.context = context;
+        //play game start audio
         mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.gamestart );
         if (mediaPlayer == null) {
             Log.e("MediaPlayer", "Failed to create MediaPlayer.");
@@ -136,12 +141,27 @@ public class GameView extends View{
                     && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth() <= robotY + robot.getHeight()){
                 life--;
                 spikes.get(i).resetPosition();
+                //play explosion audio
                 mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.explosion );
                 if (mediaPlayer == null) {
                     Log.e("MediaPlayer", "Failed to create MediaPlayer.");
                 } else {
                     mediaPlayer.start();
                 }
+
+                //vibrate upon contact with bomb
+                Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                if (vibrator != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                        Log.d("vibrate", "vibrate");
+                    } else {
+                        // Deprecated in API 26 (Android 8.0 Oreo)
+                        vibrator.vibrate(500);
+                    }
+                }
+
+
 
                 //if player's life reach 0, redirect to game overview
                 if (life == 0){
