@@ -13,12 +13,13 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/game_title"
          />
+
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/rabbit"
+        android:layout_width="162dp"
+        android:layout_height="95dp"
         android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp" />
+        android:layout_marginBottom="40dp"
+        app:srcCompat="@drawable/robot_blue" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

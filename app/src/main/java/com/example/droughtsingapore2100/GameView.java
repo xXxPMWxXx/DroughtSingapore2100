@@ -224,7 +224,7 @@ public class GameView extends View{
                     }
                 }
                 water.decreaseWater();
-                //if player's water reach 0, redirect to game overview
+                //if water level reach 0, redirect to game overview
                 if (water.getWaterLevel() == 0 && !isGameOverTriggered()) {
                     // Set the flag to true to indicate that game over condition is triggered
                     setGameOverTriggered(true);
@@ -259,6 +259,7 @@ public class GameView extends View{
                     && droplet.dropletY + droplet.getDropletWidth() >= robotY
                     && droplet.dropletY + droplet.getDropletWidth() <= robotY + robot.getHeight()){
                 water.increaseWater();
+                points += 10;
                 droplet.resetPosition();
             }
         }
