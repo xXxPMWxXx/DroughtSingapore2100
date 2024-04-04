@@ -38,7 +38,6 @@ public class GameView extends View{
     Paint robotPaint = new Paint();
     float TEXT_SIZE = 120; //size of text on screen
     int points = 0; //player score
-//    int water = 10; //remaining water
     static int dWidth, dHeight; //width and height of the game's display
     Random random; //generate random numbers for certain game
     float robotX, robotY; //position of player character
@@ -114,7 +113,7 @@ public class GameView extends View{
         textPaint.setTextSize(TEXT_SIZE);
         textPaint.setTextAlign(Paint.Align.LEFT);
         textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.b04));
-        waterLevelPaint.setColor(Color.BLUE);
+        waterLevelPaint.setColor(Color.parseColor("#3ea4f0"));
 
         //initial position of the robot
         random = new Random();
@@ -157,6 +156,7 @@ public class GameView extends View{
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        // For shaking effect
         if (isShaking) {
             // Check the duration
             if (System.currentTimeMillis() - shakeStartTime < SHAKE_DURATION) {
@@ -274,27 +274,34 @@ public class GameView extends View{
         }
 
         if (water.getWaterLevel() == 4){
-            waterLevelPaint.setColor(Color.YELLOW);
+            waterLevelPaint.setColor(Color.parseColor("#ffffbf"));
         } else if(water.getWaterLevel() == 2){
-            waterLevelPaint.setColor(Color.RED);
+            waterLevelPaint.setColor(Color.parseColor("#ff3632"));
         }
 
         // Variable to draw water level
         int maxWaterLevel = 10;
-        int maxWidth = 225;
+        int maxWidth = 450;
         int padding = 100;
         int currentWidth = (int) ((water.getWaterLevel() / (float) maxWaterLevel) * maxWidth);
         // For rectangle
         int right = dWidth - padding;
         int left = right - currentWidth;
 
-        // Align water bar image with the rectangle
-        int x = right - waterBarBitmap.getWidth() + 80;
+        // Calculate the new size you want
+        int newWidth = waterBarBitmap.getWidth() * 2; // scaleFactor > 1 to increase size
+        int newHeight = waterBarBitmap.getHeight() * 2; // scaleFactor > 1 to increase size
 
-        // Draw the bitmap first to ensure it's behind the rectangle
-        canvas.drawBitmap(waterBarBitmap, x, -125, null);
+        // Resize the bitmap
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(waterBarBitmap, newWidth, newHeight, true);
+
+        // Align water bar image with the rectangle
+        int x = right - scaledBitmap.getWidth() + 150;
         // Draw the water level
-        canvas.drawRect(left, 30, right, 65, waterLevelPaint);
+        canvas.drawRect(left, 50, right, 120, waterLevelPaint);
+        // Draw the bitmap first to ensure it's behind the rectangle
+        canvas.drawBitmap(scaledBitmap, x, -265, null);
+
         //draw score on canvas
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);
 
