@@ -2,6 +2,7 @@ package com.example.droughtsingapore2100;
 
 public class Water {
     private int waterLevel;
+    private int maxWaterLevel = 10;
     private final long LIFE_DECREASE_INTERVAL = 5000; // Decrease water every 5 seconds
     private Thread waterThread;
     private boolean isRunning = true;
@@ -34,14 +35,14 @@ public class Water {
         // Decrease water by 1
         waterLevel--;
         // If water reaches 0, end the game
-        if (waterLevel <= 0) {
+        if (getWaterLevel() <= 0) {
             endGame();
         }
     }
 
     public synchronized void increaseWater() {
         // If water reaches 0, end the game
-        if (waterLevel != 10) {
+        if (getWaterLevel() < maxWaterLevel) {
             waterLevel++;
         }
     }

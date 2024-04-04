@@ -28,7 +28,6 @@ import java.util.Random;
 public class GameView extends View{
     Bitmap background, ground, robot; //display images in the game
     private MediaPlayer mediaPlayer;
-
     Rect rectBackground, rectGround; //define position and size of background and size images
     Context context; //to retrieve resources and perform other task
     Handler handler; //schedule tasks to be run
@@ -48,15 +47,13 @@ public class GameView extends View{
     ArrayList<Spike> spikes;
     ArrayList<Explosion> explosions;
     ArrayList<Droplet> droplets;
-
-//    private final long LIFE_DECREASE_INTERVAL = 5000; // Decrease water every 5 seconds
     private final Water water;
     private final Thread waterThread;
-
     // To make the robot shaking
     private boolean isShaking = false;
     private long shakeStartTime;
     private final long SHAKE_DURATION = 800;
+    private volatile boolean gameOverTriggered = false; // Volatile keyword ensures visibility across threads
 
     public void startShaking() {
         if (!isShaking) {
@@ -135,45 +132,6 @@ public class GameView extends View{
         water = new Water(10); // Initial water level
         waterThread = water.startWaterThread();
     }
-
-//    private void startWaterThread() {
-//        waterThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (isRunning) {
-//                    try {
-//                        Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
-//                        decreaseWater(); // Decrease water after the interval
-//                        System.out.println(water);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
-//        waterThread.start(); // Start the thread
-//    }
-
-//    private synchronized void decreaseWater() {
-//        // Decrease water by 1
-//        water--;
-//
-//        // If water reaches 0, end the game
-//        if (water <= 0) {
-//            endGame();
-//        }
-//    }
-
-//    private void endGame() {
-//        // Stop the water thread
-//        isRunning = false;
-//
-//        // Redirect to game over activity
-//        Intent intent = new Intent(context, GameOver.class);
-//        intent.putExtra("points", points);
-//        context.startActivity(intent);
-//        ((Activity) context).finish();
-//    }
 
     // Override onDetachedFromWindow to stop the thread when the view is detached
     @Override
@@ -265,14 +223,18 @@ public class GameView extends View{
                         vibrator.vibrate(500);
                     }
                 }
+                water.decreaseWater();
                 //if player's water reach 0, redirect to game overview
-                if (water.getWaterLevel() <= 1) {
+                if (water.getWaterLevel() == 0 && !isGameOverTriggered()) {
+                    // Set the flag to true to indicate that game over condition is triggered
+                    setGameOverTriggered(true);
+
+                    // Start game over activity
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
                     context.startActivity(intent);
                     ((Activity) context).finish();
                 }
-                water.decreaseWater();
             }
         }
 
@@ -373,4 +335,13 @@ public class GameView extends View{
         return true;
     }
 
+    // Method to get the value of gameOverTriggered with synchronization
+    private synchronized boolean isGameOverTriggered() {
+        return gameOverTriggered;
+    }
+
+    // Method to set the value of gameOverTriggered with synchronization
+    private synchronized void setGameOverTriggered(boolean value) {
+        gameOverTriggered = value;
+    }
 }

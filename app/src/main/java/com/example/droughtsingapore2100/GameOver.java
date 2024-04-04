@@ -72,14 +72,18 @@ public class GameOver extends AppCompatActivity {
 
     // Define the restart method that is called when the restart button is clicked
     public void restart(View view) {
-        Intent intent = new Intent(GameOver.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        // Start the GameView activity to start a new game
+        GameView gameView = new GameView(GameOver.this);
+        setContentView(gameView);
     }
+
 
     // Define the exit method that is called when the exit button is clicked
     public void exit(View view) {
-        finish(); // Finish this activity to exit
+        // Start the MainActivity activity to return to the main menu
+        Intent intent = new Intent(GameOver.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }
