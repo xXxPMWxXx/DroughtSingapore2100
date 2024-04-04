@@ -24,6 +24,13 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".GameView"
+                android:label="GameView"
+                android:exported="true"
+                android:screenOrientation="portrait">
+        </activity>
+
+        <activity
             android:name=".GameOver"
             android:exported="true"
             android:screenOrientation="portrait">
