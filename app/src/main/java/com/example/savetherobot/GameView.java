@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -35,6 +36,7 @@ public class GameView extends View{
     Runnable runnable; //update graphic
     Paint textPaint = new Paint(); //render text on screen
     Paint healthPaint = new Paint(); //render the player's health bar
+    Paint robotPaint = new Paint();
     float TEXT_SIZE = 120; //size of text on screen
     int points = 0; //player score
 //    int water = 10; //remaining water
@@ -45,10 +47,23 @@ public class GameView extends View{
     float oldRobotX; //character's position on previous frame
     ArrayList<Spike> spikes;
     ArrayList<Explosion> explosions;
+    ArrayList<Droplet> droplets;
 
 //    private final long LIFE_DECREASE_INTERVAL = 5000; // Decrease water every 5 seconds
     private final Water water;
     private final Thread waterThread;
+
+    // To make the robot shaking
+    private boolean isShaking = false;
+    private long shakeStartTime;
+    private final long SHAKE_DURATION = 800;
+
+    public void startShaking() {
+        if (!isShaking) {
+            isShaking = true;
+            shakeStartTime = System.currentTimeMillis();
+        }
+    }
 
     public GameView(Context context) {
         super(context);
@@ -81,6 +96,16 @@ public class GameView extends View{
         //Create a Handler object to manage tasks that need to be run on the UI thread
         handler = new Handler();
 
+        //Post a delayed Runnable to the Handler's message queue to executed after a certain delay
+        handler.postDelayed(new Runnable() {
+            @Override
+            //generate droplet and schedules the next execution
+            public void run() {
+                generateDroplet();
+                handler.postDelayed(this, 3000);
+            }
+        }, 3000);
+
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -100,9 +125,12 @@ public class GameView extends View{
         robotY = dHeight - ground.getHeight() - robot.getHeight();
         spikes = new ArrayList<>();
         explosions = new ArrayList<>();
+        droplets = new ArrayList<>();
         for (int i=0; i<3; i++){
             Spike spike = new Spike(context);
+            Droplet droplet = new Droplet(context);
             spikes.add(spike);
+            droplets.add(droplet);
         }
         water = new Water(10); // Initial water level
         waterThread = water.startWaterThread();
@@ -159,13 +187,38 @@ public class GameView extends View{
         }
     }
 
+    //create new Droplet object and add into 'droplets' Arraylist
+    private void generateDroplet(){
+        Droplet droplet = new Droplet(getContext());
+        droplets.add(droplet);
+    }
+
+    private Bitmap waterBarBitmap;
     @Override
     //responsible for drawing tha game screen
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if (isShaking) {
+            // Check the duration
+            if (System.currentTimeMillis() - shakeStartTime < SHAKE_DURATION) {
+                // For shaking effect
+                int shakeAmplitude = 20;
+                robotX += (random.nextInt(shakeAmplitude * 2) - shakeAmplitude);
+                robotPaint.setColorFilter(new LightingColorFilter(0xFFFFFF, 0xFFFF0000));
+            } else {
+                // Stop shaking after the duration
+                isShaking = false;
+                robotPaint.setColorFilter(null);
+            }
+        }
+
         canvas.drawBitmap(background, null, rectBackground, null);
         canvas.drawBitmap(ground, null, rectGround, null);
-        canvas.drawBitmap(robot, robotX, robotY, null);
+
+        canvas.drawBitmap(robot, robotX, robotY, robotPaint);
+        // Load the bitmap from drawable resources
+        waterBarBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.water_bar);
 
         //draw all spike on the canvas
         for (Spike spike : spikes) {
@@ -193,6 +246,7 @@ public class GameView extends View{
                     && spike.spikeY + spike.getSpikeWidth() >= robotY
                     && spike.spikeY + spike.getSpikeWidth() <= robotY + robot.getHeight()) {
                 spike.resetPosition();
+                startShaking();
                 //play explosion audio
                 mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.explosion);
                 if (mediaPlayer == null) {
@@ -200,7 +254,6 @@ public class GameView extends View{
                 } else {
                     mediaPlayer.start();
                 }
-
                 //vibrate upon contact with bomb
                 Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                 if (vibrator != null) {
@@ -212,16 +265,39 @@ public class GameView extends View{
                         vibrator.vibrate(500);
                     }
                 }
-
-
                 //if player's water reach 0, redirect to game overview
-                if (water.getWaterLevel() <= 0) {
+                if (water.getWaterLevel() <= 1) {
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
                     context.startActivity(intent);
                     ((Activity) context).finish();
                 }
                 water.decreaseWater();
+            }
+        }
+
+        //draw all droplets on the canvas
+        for (int i=0; i<droplets.size(); i++){
+            canvas.drawBitmap(droplets.get(i).getDroplet(droplets.get(i).dropletFrame), droplets.get(i).dropletX, droplets.get(i).dropletY, null);
+            droplets.get(i).dropletFrame++;
+            if (droplets.get(i).dropletFrame > 1){
+                droplets.get(i).dropletFrame = 0;
+            }
+            //Droplet position based on its velocity, and removes Droplet when it reaches the ground
+            droplets.get(i).dropletY += droplets.get(i).dropletVelocity;
+            if (droplets.get(i).dropletY + droplets.get(i).getDropletHeight() >= dHeight - ground.getHeight()){
+                droplets.remove(i);
+            }
+        }
+
+        //if robot collides with any droplet, increase the water level
+        for (Droplet droplet : droplets){
+            if (droplet.dropletX + droplet.getDropletWidth() >= robotX
+                    && droplet.dropletX <= robotX + robot.getWidth()
+                    && droplet.dropletY + droplet.getDropletWidth() >= robotY
+                    && droplet.dropletY + droplet.getDropletWidth() <= robotY + robot.getHeight()){
+                water.increaseWater();
+                droplet.resetPosition();
             }
         }
 
@@ -240,10 +316,26 @@ public class GameView extends View{
         } else if(water.getWaterLevel() == 2){
             healthPaint.setColor(Color.RED);
         }
-        //draw player's score and water on canvas
-        // Draw the health bar
-        canvas.drawRect(dWidth - 200 - 60 * water.getWaterLevel(), 30, dWidth - 200, 80, healthPaint);
+
+        // Variable to draw water level
+        int maxWaterLevel = 10;
+        int maxWidth = 225;
+        int padding = 100;
+        int currentWidth = (int) ((water.getWaterLevel() / (float) maxWaterLevel) * maxWidth);
+        // For rectangle
+        int right = dWidth - padding;
+        int left = right - currentWidth;
+
+        // Align water bar image with the rectangle
+        int x = right - waterBarBitmap.getWidth() + 80;
+
+        // Draw the bitmap first to ensure it's behind the rectangle
+        canvas.drawBitmap(waterBarBitmap, x, -125, null);
+        // Draw the water level
+        canvas.drawRect(left, 30, right, 65, healthPaint);
+        //draw score on canvas
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);
+
         //creates loop that updates the game state and draws the game screen repeatedly
         handler.postDelayed(runnable, UPDATE_MILLIS);
     }
