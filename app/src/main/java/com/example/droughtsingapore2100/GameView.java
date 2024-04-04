@@ -43,7 +43,7 @@ public class GameView extends View{
     float robotX, robotY; //position of player character
     float oldX;
     float oldRobotX; //character's position on previous frame
-    ArrayList<Spike> spikes;
+    ArrayList<Bomb> bombs;
     ArrayList<Explosion> explosions;
     ArrayList<Droplet> droplets;
     private final Water water;
@@ -119,13 +119,13 @@ public class GameView extends View{
         random = new Random();
         robotX = dWidth / 2 - robot.getWidth() / 2;
         robotY = dHeight - ground.getHeight() - robot.getHeight();
-        spikes = new ArrayList<>();
+        bombs = new ArrayList<>();
         explosions = new ArrayList<>();
         droplets = new ArrayList<>();
-        for (int i=0; i<3; i++){
-            Spike spike = new Spike(context);
+        for (int i=0; i<4; i++){
+            Bomb bomb = new Bomb(context);
             Droplet droplet = new Droplet(context);
-            spikes.add(spike);
+            bombs.add(bomb);
             droplets.add(droplet);
         }
         water = new Water(10); // Initial water level
@@ -178,32 +178,32 @@ public class GameView extends View{
         // Load the bitmap from drawable resources
         waterBarBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.water_bar);
 
-        //draw all spike on the canvas
-        for (Spike spike : spikes) {
-            canvas.drawBitmap(spike.getSpike(spike.spikeFrame), spike.spikeX, spike.spikeY, null);
-            spike.spikeFrame++;
-            if (spike.spikeFrame > 2) {
-                spike.spikeFrame = 0;
+        //draw all bomb on the canvas
+        for (Bomb bomb : bombs) {
+            canvas.drawBitmap(bomb.getBomb(bomb.bombFrame), bomb.bombX, bomb.bombY, null);
+            bomb.bombFrame++;
+            if (bomb.bombFrame > 3) {
+                bomb.bombFrame = 0;
             }
-            //velocity & resets spike position
-            spike.spikeY += spike.spikeVelocity;
-            if (spike.spikeY + spike.getSpikeHeight() >= dHeight - ground.getHeight()) {
+            //velocity & resets bomb position
+            bomb.bombY += bomb.bombVelocity;
+            if (bomb.bombY + bomb.getBombHeight() >= dHeight - ground.getHeight()) {
                 points += 10;
                 Explosion explosion = new Explosion(context);
-                explosion.explosionX = spike.spikeX;
-                explosion.explosionY = spike.spikeY;
+                explosion.explosionX = bomb.bombX;
+                explosion.explosionY = bomb.bombY;
                 explosions.add(explosion);
-                spike.resetPosition();
+                bomb.resetPosition();
             }
         }
 
-        //if robot collides with any spikes, decrease the player's water by 1
-        for (Spike spike : spikes) {
-            if (spike.spikeX + spike.getSpikeWidth() >= robotX
-                    && spike.spikeX <= robotX + robot.getWidth()
-                    && spike.spikeY + spike.getSpikeWidth() >= robotY
-                    && spike.spikeY + spike.getSpikeWidth() <= robotY + robot.getHeight()) {
-                spike.resetPosition();
+        //if robot collides with any bombs, decrease the player's water by 1
+        for (Bomb bomb : bombs) {
+            if (bomb.bombX + bomb.getBombWidth() >= robotX
+                    && bomb.bombX <= robotX + robot.getWidth()
+                    && bomb.bombY + bomb.getBombWidth() >= robotY
+                    && bomb.bombY + bomb.getBombWidth() <= robotY + robot.getHeight()) {
+                bomb.resetPosition();
                 startShaking();
                 //play explosion audio
                 mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.explosion);
@@ -273,10 +273,14 @@ public class GameView extends View{
             }
         }
 
-        if (water.getWaterLevel() == 4){
+
+        if (water.getWaterLevel() <= 5 && water.getWaterLevel() > 2){
             waterLevelPaint.setColor(Color.parseColor("#ffffbf"));
-        } else if(water.getWaterLevel() == 2){
+        } else if(water.getWaterLevel() <= 2){
             waterLevelPaint.setColor(Color.parseColor("#ff3632"));
+        } else {
+            waterLevelPaint.setColor(Color.parseColor("#3ea4f0"));
+
         }
 
         // Variable to draw water level
