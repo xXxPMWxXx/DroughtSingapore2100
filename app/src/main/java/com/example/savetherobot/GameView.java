@@ -35,7 +35,7 @@ public class GameView extends View{
     final long UPDATE_MILLIS = 30; //time for each frame in game
     Runnable runnable; //update graphic
     Paint textPaint = new Paint(); //render text on screen
-    Paint healthPaint = new Paint(); //render the player's health bar
+    Paint waterLevelPaint = new Paint(); //render the player's health bar
     Paint robotPaint = new Paint();
     float TEXT_SIZE = 120; //size of text on screen
     int points = 0; //player score
@@ -117,7 +117,7 @@ public class GameView extends View{
         textPaint.setTextSize(TEXT_SIZE);
         textPaint.setTextAlign(Paint.Align.LEFT);
         textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.b04));
-        healthPaint.setColor(Color.BLUE);
+        waterLevelPaint.setColor(Color.BLUE);
 
         //initial position of the robot
         random = new Random();
@@ -312,9 +312,9 @@ public class GameView extends View{
         }
 
         if (water.getWaterLevel() == 4){
-            healthPaint.setColor(Color.YELLOW);
+            waterLevelPaint.setColor(Color.YELLOW);
         } else if(water.getWaterLevel() == 2){
-            healthPaint.setColor(Color.RED);
+            waterLevelPaint.setColor(Color.RED);
         }
 
         // Variable to draw water level
@@ -332,7 +332,7 @@ public class GameView extends View{
         // Draw the bitmap first to ensure it's behind the rectangle
         canvas.drawBitmap(waterBarBitmap, x, -125, null);
         // Draw the water level
-        canvas.drawRect(left, 30, right, 65, healthPaint);
+        canvas.drawRect(left, 30, right, 65, waterLevelPaint);
         //draw score on canvas
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);
 
