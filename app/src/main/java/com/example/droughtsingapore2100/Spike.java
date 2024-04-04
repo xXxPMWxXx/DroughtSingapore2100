@@ -1,4 +1,4 @@
-package com.example.savetherobot;
+package com.example.droughtsingapore2100;
 // imports context class
 import android.content.Context;
 // imports bitmap class

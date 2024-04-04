@@ -1,7 +1,4 @@
-package com.example.savetherobot;
-
-import android.app.Activity;
-import android.content.Intent;
+package com.example.droughtsingapore2100;
 
 public class Water {
     private int waterLevel;
