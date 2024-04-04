@@ -1,4 +1,4 @@
-package com.example.savetherobot;
+package com.example.droughtsingapore2100;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

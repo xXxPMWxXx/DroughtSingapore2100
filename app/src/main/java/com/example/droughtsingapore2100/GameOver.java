@@ -1,6 +1,5 @@
-package com.example.savetherobot;
+package com.example.droughtsingapore2100;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;

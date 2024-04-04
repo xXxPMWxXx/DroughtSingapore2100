@@ -1,4 +1,4 @@
-package com.example.savetherobot;
+package com.example.droughtsingapore2100;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;

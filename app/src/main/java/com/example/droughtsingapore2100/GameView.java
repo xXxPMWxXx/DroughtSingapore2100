@@ -1,4 +1,4 @@
-package com.example.savetherobot;
+package com.example.droughtsingapore2100;
 
 import android.app.Activity;
 import android.content.Context;

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.savetherobot"
+    namespace = "com.example.droughtsingapore2100"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.savetherobot"
+        applicationId = "com.example.droughtsingapore2100"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
