@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@drawable/gameover">
@@ -41,149 +42,162 @@
                 android:textSize="45sp"
                 android:textColor="@android:color/white"
                 android:background="@color/cardview_dark_background"
+                android:padding="5dp"
                 android:backgroundTint="#bb8044"
                 android:fontFamily="@font/b04"/>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/backboardImageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="466dp"
+            android:layout_above="@id/tableLayout"
+            android:layout_alignTop="@+id/tableLayout"
+            android:layout_marginTop="-82dp"
+            android:layout_marginBottom="-284dp"
+            android:src="@drawable/backboard" />
+
         <TableLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            android:id="@+id/tableLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"> <!-- Center the TableLayout -->
+            >
             <!-- Your Point Row -->
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal"
-                    android:paddingBottom="10dp">
+                    android:fontFamily="@font/b04"
+                    android:text="Your Points:"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Your Points: "
-                        android:textSize="22sp"
-                        android:textColor="#f20202"
-                        android:fontFamily="@font/b04"/>
-
-                <TextView
-                        android:id="@+id/tvPoints"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="hello"
-                        android:textSize="32sp"
-                        android:textColor="@android:color/white"
-                        android:background="@color/cardview_dark_background"
-                        android:backgroundTint="#bb8044"
-                        android:fontFamily="@font/b04"/>
+                    android:id="@+id/tvPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/cardview_dark_background"
+                    android:backgroundTint="#bb8044"
+                    android:fontFamily="@font/b04"
+                    android:padding="4dp"
+                    android:text="hello"
+                    android:textColor="@android:color/white"
+                    android:textSize="32sp" />
             </LinearLayout>
 
             <!-- Top 3 text Row -->
             <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:paddingBottom="10dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Top 3: "
-                        android:textSize="32sp"
-                        android:layout_gravity="center"
-                        android:textColor="#f20202"
-                        android:fontFamily="@font/b04"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/b04"
+                    android:text="Top 3: "
+                    android:textColor="#f20202"
+                    android:textSize="32sp" />
             </LinearLayout>
 
             <!-- Top 1 Row -->
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp">
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:fontFamily="@font/b04"
                     android:gravity="center"
-                    android:paddingBottom="20dp">
+                    android:text="1."
+                    android:textColor="@color/colorTop1"
+                    android:textSize="22sp" />
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1."
-                        android:textSize="22sp"
-                        android:gravity="center"
-                        android:fontFamily="@font/b04"
-                        android:background="#bb8044"
-                        android:textColor="@color/colorTop1"/>
+                    android:id="@+id/tvTop1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/b04"
+                    android:textColor="@color/colorTop2"
+                    android:text="test"
 
-                <TextView
-                        android:id="@+id/tvTop1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="22sp"
-                        android:textColor="@color/colorTop1"
-                        android:background="#bb8044"
-                        android:fontFamily="@font/b04"/>
+                    android:textSize="22sp" />
             </LinearLayout>
 
             <!-- Top 2 Row -->
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp">
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:fontFamily="@font/b04"
                     android:gravity="center"
-                    android:paddingBottom="20dp">
+                    android:text="2."
+                    android:textColor="@color/colorTop1"
+                    android:textSize="22sp" />
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2."
-                        android:textColor="@color/colorTop1"
-                        android:textSize="22sp"
-                        android:gravity="center"
-                        android:background="#bb8044"
-                        android:fontFamily="@font/b04"/>
-
-                <TextView
-                        android:id="@+id/tvTop2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="22sp"
-                        android:textColor="@color/colorTop1"
-                        android:background="#bb8044"
-                        android:fontFamily="@font/b04"/>
+                    android:id="@+id/tvTop2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/b04"
+                    android:textColor="@color/colorTop2"
+                    android:text="test"
+                    android:textSize="22sp" />
             </LinearLayout>
 
             <!-- Top 3 Row -->
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:fontFamily="@font/b04"
+                    android:gravity="center"
+                    android:text="3."
+                    android:textColor="@color/colorTop1"
+                    android:textSize="22sp" />
 
                 <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="3."
-                        android:textColor="@color/colorTop1"
-                        android:textSize="22sp"
-                        android:gravity="center"
-                        android:background="#bb8044"
-                        android:fontFamily="@font/b04"/>
+                    android:id="@+id/tvTop3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/b04"
+                    android:textColor="@color/colorTop2"
+                    android:text="test"
+                    android:textSize="22sp" />
+            </LinearLayout>
 
-                <TextView
-                        android:id="@+id/tvTop3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="22sp"
-                        android:textColor="@color/colorTop1"
-                        android:background="#bb8044"
-                        android:fontFamily="@font/b04"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:paddingBottom="150dp">
-            </LinearLayout>
+            <LinearLayout android:paddingBottom="150dp"></LinearLayout>
         </TableLayout>
-    </LinearLayout>
+
+    </RelativeLayout>
 </LinearLayout>
