@@ -288,19 +288,19 @@ public class GameView extends View{
         int right = dWidth - padding;
         int left = right - currentWidth;
 
-        // Calculate the new size you want
-        int newWidth = waterBarBitmap.getWidth() * 2; // scaleFactor > 1 to increase size
-        int newHeight = waterBarBitmap.getHeight() * 2; // scaleFactor > 1 to increase size
+        // Resize the water bar image
+        int newWidth = waterBarBitmap.getWidth() * 2;
+        int newHeight = waterBarBitmap.getHeight() * 2;
 
         // Resize the bitmap
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(waterBarBitmap, newWidth, newHeight, true);
+        Bitmap scaledWaterBar = Bitmap.createScaledBitmap(waterBarBitmap, newWidth, newHeight, true);
 
-        // Align water bar image with the rectangle
-        int x = right - scaledBitmap.getWidth() + 150;
+        // Align water bar image with the rectangle , align with Pixel 5 resolution
+        int x = right - scaledWaterBar.getWidth() + 150;
         // Draw the water level
         canvas.drawRect(left, 50, right, 120, waterLevelPaint);
         // Draw the bitmap first to ensure it's behind the rectangle
-        canvas.drawBitmap(scaledBitmap, x, -265, null);
+        canvas.drawBitmap(scaledWaterBar, x, -265, null);
 
         //draw score on canvas
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);

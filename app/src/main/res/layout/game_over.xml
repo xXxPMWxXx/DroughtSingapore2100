@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:text="Your Points: "
                         android:textSize="22sp"
-                        android:textColor="@android:color/holo_orange_light"
+                        android:textColor="#f20202"
                         android:fontFamily="@font/b04"/>
 
                 <TextView
@@ -102,7 +102,7 @@
                         android:text="Top 3: "
                         android:textSize="32sp"
                         android:layout_gravity="center"
-                        android:textColor="@android:color/holo_orange_light"
+                        android:textColor="#f20202"
                         android:fontFamily="@font/b04"/>
             </LinearLayout>
 
