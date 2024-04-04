@@ -1,152 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background">
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/gameover">
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/restart"
-            android:onClick="restart" />
+            android:orientation="horizontal">
+
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/restart"
+                android:onClick="restart" />
+
         <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/exit"
-            android:onClick="exit" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/exit"
+                android:onClick="exit" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ivNewHighest"
-            android:background="@drawable/new_highest"
-            android:visibility="gone" />
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <!-- Your Point Row -->
-            <TableRow
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:paddingTop="50dp">
+        <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
-                <LinearLayout
+                android:text="GAME OVER"
+                android:textSize="45sp"
+                android:textColor="@android:color/white"
+                android:background="@color/cardview_dark_background"
+                android:backgroundTint="#bb8044"
+                android:fontFamily="@font/b04"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivNewHighest"
+                android:background="@drawable/new_highest"
+                android:visibility="gone" />
+
+        <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <!-- Your Point Row -->
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="10dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Your Points: "
+                        android:textSize="22sp"
+                        android:textColor="@android:color/holo_orange_light"
+                        android:fontFamily="@font/b04"/>
+
+                <TextView
+                        android:id="@+id/tvPoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="hello"
+                        android:textSize="32sp"
+                        android:textColor="@android:color/white"
+                        android:background="@color/cardview_dark_background"
+                        android:backgroundTint="#bb8044"
+                        android:fontFamily="@font/b04"/>
+            </LinearLayout>
+
+            <!-- Top 3 text Row -->
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingBottom="10dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Top 3: "
+                        android:textSize="32sp"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/holo_orange_light"
+                        android:fontFamily="@font/b04"/>
+            </LinearLayout>
+
+            <!-- Top 1 Row -->
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingBottom="20dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1."
+                        android:textSize="22sp"
+                        android:gravity="center"
+                        android:fontFamily="@font/b04"
+                        android:background="#bb8044"
+                        android:textColor="@color/colorTop1"/>
+
+                <TextView
+                        android:id="@+id/tvTop1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textColor="@color/colorTop1"
+                        android:background="#bb8044"
+                        android:fontFamily="@font/b04"/>
+            </LinearLayout>
+
+            <!-- Top 2 Row -->
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingBottom="20dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2."
+                        android:textColor="@color/colorTop1"
+                        android:textSize="22sp"
+                        android:gravity="center"
+                        android:background="#bb8044"
+                        android:fontFamily="@font/b04"/>
+
+                <TextView
+                        android:id="@+id/tvTop2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textColor="@color/colorTop1"
+                        android:background="#bb8044"
+                        android:fontFamily="@font/b04"/>
+            </LinearLayout>
+
+            <!-- Top 3 Row -->
+            <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center">
-                    <TextView
+
+                <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your Points: "
-                        android:textSize="24sp"
-                        android:textColor="@android:color/holo_orange_light"
+                        android:text="3."
+                        android:textColor="@color/colorTop1"
+                        android:textSize="22sp"
+                        android:gravity="center"
+                        android:background="#bb8044"
                         android:fontFamily="@font/b04"/>
 
-                    <TextView
-                        android:id="@+id/tvPoints"
+                <TextView
+                        android:id="@+id/tvTop3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="30sp"
-                        android:textColor="@android:color/holo_green_dark"
-                        android:fontFamily="@font/b04" />
-                </LinearLayout>
-            </TableRow>
-            <!-- Top 3 text Row -->
-            <TableRow
-                android:layout_width="match_parent"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Top 3: "
-                    android:textSize="30sp"
-                    android:layout_gravity="center"
-                    android:textColor="@android:color/holo_blue_light"
-                    android:fontFamily="@font/b04" />
-            </TableRow>
-
-            <!-- Top 1 Row -->
-            <TableRow
-                android:layout_width="match_parent"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1."
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:fontFamily="@font/b04"
-                    android:textColor="@color/colorTop1"/>
-                <TextView
-                    android:id="@+id/tvTop1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorTop1"
-                    android:fontFamily="@font/b04" />
-
-            </TableRow>
-            <!-- Top 2 Row -->
-            <TableRow
-                android:layout_width="match_parent"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="2."
-                    android:textColor="@color/colorTop2"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:fontFamily="@font/b04"/>
-                <TextView
-                    android:id="@+id/tvTop2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorTop2"
-                    android:fontFamily="@font/b04" />
-            </TableRow>
-            <!-- Top 3 Row -->
-            <TableRow
-                android:layout_width="match_parent"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="3."
-                    android:textColor="@color/colorTop3"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:fontFamily="@font/b04"/>
-                <TextView
-                    android:id="@+id/tvTop3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorTop3"
-                    android:fontFamily="@font/b04" />
-            </TableRow>
+                        android:textSize="22sp"
+                        android:textColor="@color/colorTop1"
+                        android:background="#bb8044"
+                        android:fontFamily="@font/b04"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:paddingBottom="150dp">
+            </LinearLayout>
         </TableLayout>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="80dp" />
     </LinearLayout>
-
 </LinearLayout>
