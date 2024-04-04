@@ -38,6 +38,7 @@
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+            <!-- Your Point Row -->
             <TableRow
                 android:layout_width="match_parent"
                 android:gravity="center">
@@ -46,7 +47,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Your Points: "
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:fontFamily="@font/b04" />/>
 
                 <TextView
                     android:id="@+id/tvPoints"
@@ -57,22 +59,82 @@
                     android:textColor="@android:color/holo_green_dark"
                     android:fontFamily="@font/b04" />
             </TableRow>
+            <!-- Top 3 text Row -->
             <TableRow
                 android:layout_width="match_parent"
                 android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Highest: "
+                    android:text="Top 3: "
                     android:textSize="24sp"
-                    android:layout_gravity="center|right" />
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/holo_blue_light"
+                    android:fontFamily="@font/b04" />
+            </TableRow>
+
+            <!-- Top 1 Row -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:gravity="center">
                 <TextView
-                    android:id="@+id/tvHighest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100"
+                    android:layout_weight="1"
+                    android:text="1"
                     android:textSize="24sp"
-                    android:textColor="@android:color/holo_orange_dark"
+                    android:gravity="center"
+                    android:fontFamily="@font/b04"
+                    android:textColor="@color/colorTop1"/>
+                <TextView
+                    android:id="@+id/tvTop1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textColor="@color/colorTop1"
+                    android:fontFamily="@font/b04" />
+
+            </TableRow>
+            <!-- Top 2 Row -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="2"
+                    android:textColor="@color/colorTop2"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/b04"/>
+                <TextView
+                    android:id="@+id/tvTop2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textColor="@color/colorTop2"
+                    android:fontFamily="@font/b04" />
+            </TableRow>
+            <!-- Top 3 Row -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="3"
+                    android:textColor="@color/colorTop3"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/b04"/>
+                <TextView
+                    android:id="@+id/tvTop3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textColor="@color/colorTop3"
                     android:fontFamily="@font/b04" />
             </TableRow>
         </TableLayout>
