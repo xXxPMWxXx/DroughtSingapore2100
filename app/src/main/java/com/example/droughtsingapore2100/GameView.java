@@ -221,9 +221,9 @@ public class GameView extends View{
                         vibrator.vibrate(500);
                     }
                 }
-                water.decreaseWater();
+                water.decreaseWater(3);
                 //if water level reach 0, redirect to game overview
-                if (water.getWaterLevel() == 0 && !isGameOverTriggered()) {
+                if (water.getWaterLevel() <= 0 && !isGameOverTriggered()) {
                     // Set the flag to true to indicate that game over condition is triggered
                     setGameOverTriggered(true);
 

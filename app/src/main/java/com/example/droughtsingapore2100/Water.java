@@ -19,7 +19,7 @@ public class Water {
                     try {
                         Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
                         if(waterLevel != 1) {
-                            decreaseWater(); // Decrease water after the interval
+                            decreaseWater(1); // Decrease water after the interval
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -31,14 +31,16 @@ public class Water {
         return waterThread;
     }
 
-    public synchronized void decreaseWater() {
-        // Decrease water by 1
+    public synchronized void decreaseWater(int amount) {
+        // Decrease water by amount
 
-        setWaterLevel(getWaterLevel() - 1);
-        // If water reaches 0, end the game
-        if (getWaterLevel() <= 0) {
+        //end game if water level below or equal 0
+        if(getWaterLevel() - amount<=0){
+            setWaterLevel(0);
             endGame();
-        }
+        } else{
+            setWaterLevel(getWaterLevel() - amount);
+        };
     }
 
     public synchronized void increaseWater() {
