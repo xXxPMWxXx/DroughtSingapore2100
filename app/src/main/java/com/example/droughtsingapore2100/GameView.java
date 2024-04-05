@@ -48,7 +48,7 @@ public class GameView extends View{
     ArrayList<Droplet> droplets;
     private final Water water;
     private final Thread waterThread;
-    // To make the robot shaking
+    // To make the robot shake
     private boolean isShaking = false;
     private long shakeStartTime;
     private final long SHAKE_DURATION = 800;
