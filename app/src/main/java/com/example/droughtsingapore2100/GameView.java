@@ -284,32 +284,32 @@ public class GameView extends View{
 
         }
 
-        // Variable to draw water level
+        // Variables for drawing water level rectangle
         int maxWaterLevel = 10;
-        int maxWidth = 450;
-        int padding = 100;
+        int maxWidth = waterBarBitmap.getWidth() + 20;
+        int padding = (int) (dWidth * 0.1) / 2;
         int currentWidth = (int) ((water.getWaterLevel() / (float) maxWaterLevel) * maxWidth);
-        // For rectangle
-        int right = dWidth - padding;
-        int left = right - currentWidth;
-
-        // Resize the water bar image
-        int newWidth = waterBarBitmap.getWidth() * 2;
-        int newHeight = waterBarBitmap.getHeight() * 2;
-
-        // Resize the bitmap
-        Bitmap scaledWaterBar = Bitmap.createScaledBitmap(waterBarBitmap, newWidth, newHeight, true);
-
-        // Align water bar image with the rectangle , align with Pixel 5 resolution
-        int x = right - scaledWaterBar.getWidth() + 150;
+        // For rectangle positioning
+        int waterLevelRectRight = dWidth - padding;
+        int waterLevelRectLeft = waterLevelRectRight - currentWidth;
+        // Determine the scale factor for resizing the water bar bitmap
+        float scaleFactor = dWidth / (float) waterBarBitmap.getWidth() * 0.5f;
+        // Resize the bitmap => to make it bigger
+        Bitmap scaledWaterBar = Bitmap.createScaledBitmap(waterBarBitmap, (int) (waterBarBitmap.getWidth() * scaleFactor), (int) (waterBarBitmap.getHeight() * scaleFactor), true);
+        // For resolution 1080
+        // Align the water bar image with the rectangle
+        int waterBarImageX = waterLevelRectRight - scaledWaterBar.getWidth() - (int) (padding) + 150;
+        int waterBarImageY = (120 + 50) / 2 - scaledWaterBar.getHeight() / 2;
+        if(dWidth == 1440) {
+            waterBarImageX += 70;
+        }
         // Draw the water level
-        canvas.drawRect(left, 50, right, 120, waterLevelPaint);
+        canvas.drawRect(waterLevelRectLeft, 50, waterLevelRectRight, 120, waterLevelPaint);
         // Draw the bitmap first to ensure it's behind the rectangle
-        canvas.drawBitmap(scaledWaterBar, x, -265, null);
-
+        canvas.drawBitmap(scaledWaterBar, waterBarImageX, waterBarImageY, null);
+        
         //draw score on canvas
         canvas.drawText("" + points, 20, TEXT_SIZE, textPaint);
-
         //creates loop that updates the game state and draws the game screen repeatedly
         handler.postDelayed(runnable, UPDATE_MILLIS);
     }
