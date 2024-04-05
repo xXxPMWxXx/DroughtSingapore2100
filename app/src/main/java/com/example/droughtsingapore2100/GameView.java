@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Random;
 public class GameView extends View{
     Bitmap background, ground, robot; //display images in the game
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer, backgroundMediaPlayer;
     Rect rectBackground, rectGround; //define position and size of background and size images
     Context context; //to retrieve resources and perform other task
     Handler handler; //schedule tasks to be run
@@ -64,13 +64,23 @@ public class GameView extends View{
     public GameView(Context context) {
         super(context);
         this.context = context;
-        //play game start audio
-        mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.gamestart );
-        if (mediaPlayer == null) {
-            Log.e("MediaPlayer", "Failed to create MediaPlayer.");
-        } else {
-            mediaPlayer.start();
-        }
+//        //play game start audio
+//        mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.gamestart );
+//        if (mediaPlayer == null) {
+//            Log.e("MediaPlayer", "Failed to create MediaPlayer.");
+//        } else {
+//            mediaPlayer.start();
+//        }
+
+//        //play background music
+//        backgroundMediaPlayer = MediaPlayer.create(this.getContext(), R.raw.bgmusic);
+//        if (backgroundMediaPlayer == null) {
+//            Log.e("backgroundMediaPlayer", "Failed to create backgroundMediaPlayer.");
+//        } else {
+//            backgroundMediaPlayer.start();
+//        }
+
+        initializeBackgroundMusic();
 
         //Load the background, ground, and robot Bitmap images from the app's resources
         background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
@@ -227,6 +237,12 @@ public class GameView extends View{
                     // Set the flag to true to indicate that game over condition is triggered
                     setGameOverTriggered(true);
 
+                    if (backgroundMediaPlayer != null) {
+                        backgroundMediaPlayer.stop();
+                        backgroundMediaPlayer.release();
+                        backgroundMediaPlayer = null;
+                    }
+
                     // Start game over activity
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
@@ -362,4 +378,36 @@ public class GameView extends View{
     private synchronized void setGameOverTriggered(boolean value) {
         gameOverTriggered = value;
     }
+
+    // Method to initialize background music
+    private void initializeBackgroundMusic() {
+        backgroundMediaPlayer = MediaPlayer.create(this.getContext(), R.raw.bgmusic);
+        if (backgroundMediaPlayer == null) {
+            Log.e("backgroundMediaPlayer", "Failed to create backgroundMediaPlayer.");
+        } else {
+            backgroundMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    // Replay background music when it ends
+                    replayBackgroundMusic();
+                }
+            });
+            backgroundMediaPlayer.start();
+        }
+    }
+
+    // Method to replay the background music
+    private void replayBackgroundMusic() {
+        if (backgroundMediaPlayer != null) {
+            backgroundMediaPlayer.stop();
+            backgroundMediaPlayer.release();
+        }
+        backgroundMediaPlayer = MediaPlayer.create(this.getContext(), R.raw.bgmusic);
+        if (backgroundMediaPlayer == null) {
+            Log.e("backgroundMediaPlayer", "Failed to create backgroundMediaPlayer.");
+        } else {
+            backgroundMediaPlayer.start();
+        }
+    }
+
 }
