@@ -98,9 +98,9 @@ public class GameView extends View{
             //generate droplet and schedules the next execution
             public void run() {
                 generateDroplet();
-                handler.postDelayed(this, 3000);
+                handler.postDelayed(this, 1500);
             }
-        }, 3000);
+        }, 1500);
 
         runnable = new Runnable() {
             @Override
@@ -124,9 +124,7 @@ public class GameView extends View{
         droplets = new ArrayList<>();
         for (int i=0; i<4; i++){
             Bomb bomb = new Bomb(context);
-            Droplet droplet = new Droplet(context);
             bombs.add(bomb);
-            droplets.add(droplet);
         }
         water = new Water(10); // Initial water level
         waterThread = water.startWaterThread();
