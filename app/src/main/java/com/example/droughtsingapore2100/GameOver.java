@@ -23,9 +23,7 @@ public class GameOver extends AppCompatActivity {
     private DBUtils dbUtils;
     //declaring instance variables
     TextView tvPoints;
-    TextView tvHighest;
-    SharedPreferences sharedPreferences;
-    ImageView ivNewHighest;
+
     //Override the onCreate method of AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,11 +33,8 @@ public class GameOver extends AppCompatActivity {
 
         // Init DBUtils
         dbUtils = new DBUtils(this);
-
         //Init instance variables with their respective views from the layout
         tvPoints = findViewById(R.id.tvPoints);
-//        tvHighest = findViewById(R.id.tvHighest);
-//        ivNewHighest = findViewById(R.id.ivNewHighest);
         //Get the points passed from GameView
         int points = getIntent().getExtras().getInt("points");
         dbUtils.insertScore(points);
@@ -91,7 +86,6 @@ public class GameOver extends AppCompatActivity {
         }
     }
 
-
     // Method to format the date to display only month and date
     private String formatDate(String dateString) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -111,7 +105,6 @@ public class GameOver extends AppCompatActivity {
         GameView gameView = new GameView(GameOver.this);
         setContentView(gameView);
     }
-
 
     // Define the exit method that is called when the exit button is clicked
     public void exit(View view) {

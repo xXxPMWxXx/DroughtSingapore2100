@@ -14,12 +14,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 public class DBUtils extends SQLiteOpenHelper {
 
     public static final String databaseName = "scores.db";
     public DBUtils(@Nullable Context context) {
-        super(context, "scores.db", null, 1);
+        super(context, databaseName, null, 1);
     }
 
     @Override
