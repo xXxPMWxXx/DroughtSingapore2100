@@ -240,7 +240,7 @@ public class GameView extends View{
         for (int i=0; i<droplets.size(); i++){
             canvas.drawBitmap(droplets.get(i).getDroplet(droplets.get(i).dropletFrame), droplets.get(i).dropletX, droplets.get(i).dropletY, null);
             droplets.get(i).dropletFrame++;
-            if (droplets.get(i).dropletFrame > 1){
+            if (droplets.get(i).dropletFrame > 3){
                 droplets.get(i).dropletFrame = 0;
             }
             //Droplet position based on its velocity, and removes Droplet when it reaches the ground
