@@ -64,21 +64,6 @@ public class GameView extends View{
     public GameView(Context context) {
         super(context);
         this.context = context;
-//        //play game start audio
-//        mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.gamestart );
-//        if (mediaPlayer == null) {
-//            Log.e("MediaPlayer", "Failed to create MediaPlayer.");
-//        } else {
-//            mediaPlayer.start();
-//        }
-
-//        //play background music
-//        backgroundMediaPlayer = MediaPlayer.create(this.getContext(), R.raw.bgmusic);
-//        if (backgroundMediaPlayer == null) {
-//            Log.e("backgroundMediaPlayer", "Failed to create backgroundMediaPlayer.");
-//        } else {
-//            backgroundMediaPlayer.start();
-//        }
 
         initializeBackgroundMusic();
 
