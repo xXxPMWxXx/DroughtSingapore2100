@@ -36,10 +36,11 @@
             android:gravity="center_horizontal"
             android:paddingTop="50dp">
         <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
                 android:text="GAME OVER"
-                android:textSize="45sp"
+                android:textSize="42sp"
                 android:textColor="@android:color/white"
                 android:background="@color/cardview_dark_background"
                 android:padding="5dp"
@@ -55,11 +56,11 @@
         <ImageView
             android:id="@+id/backboardImageView"
             android:layout_width="match_parent"
-            android:layout_height="466dp"
+            android:layout_height="500dp"
             android:layout_above="@id/tableLayout"
             android:layout_alignTop="@+id/tableLayout"
-            android:layout_marginTop="-82dp"
-            android:layout_marginBottom="-284dp"
+            android:layout_marginTop="-80dp"
+            android:layout_marginBottom="-300dp"
             android:src="@drawable/backboard" />
 
         <TableLayout
@@ -88,12 +89,10 @@
                     android:id="@+id/tvPoints"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/cardview_dark_background"
-                    android:backgroundTint="#bb8044"
+                    android:textColor="@color/colorTop2"
                     android:fontFamily="@font/b04"
                     android:padding="4dp"
-                    android:text="hello"
-                    android:textColor="@android:color/white"
+                    android:text="test"
                     android:textSize="32sp" />
             </LinearLayout>
 
