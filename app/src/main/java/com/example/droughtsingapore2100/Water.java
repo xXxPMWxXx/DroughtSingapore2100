@@ -56,10 +56,6 @@ public class Water {
         return waterLevel;
     }
 
-    public synchronized void setWaterLevel(int waterLevel) {
-        this.waterLevel = waterLevel;
-    }
-
     public synchronized void stopWaterThread() {
         isRunning = false;
     }
