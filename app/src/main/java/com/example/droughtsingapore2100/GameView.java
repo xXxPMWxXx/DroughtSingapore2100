@@ -256,6 +256,14 @@ public class GameView extends View{
                     && droplet.dropletX <= robotX + robot.getWidth()
                     && droplet.dropletY + droplet.getDropletWidth() >= robotY
                     && droplet.dropletY + droplet.getDropletWidth() <= robotY + robot.getHeight()){
+
+                //play water audio
+                mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.water);
+                if (mediaPlayer == null) {
+                    Log.e("MediaPlayer", "Failed to create MediaPlayer.");
+                } else {
+                    mediaPlayer.start();
+                }
                 water.increaseWater();
                 points += 10;
                 droplet.resetPosition();
