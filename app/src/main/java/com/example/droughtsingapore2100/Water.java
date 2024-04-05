@@ -33,7 +33,8 @@ public class Water {
 
     public synchronized void decreaseWater() {
         // Decrease water by 1
-        waterLevel--;
+
+        setWaterLevel(getWaterLevel() - 1);
         // If water reaches 0, end the game
         if (getWaterLevel() <= 0) {
             endGame();
@@ -43,7 +44,7 @@ public class Water {
     public synchronized void increaseWater() {
         // If water reaches 0, end the game
         if (getWaterLevel() < maxWaterLevel) {
-            waterLevel++;
+            setWaterLevel(getWaterLevel() + 1);
         }
     }
 
@@ -54,6 +55,10 @@ public class Water {
 
     public synchronized int getWaterLevel() {
         return waterLevel;
+    }
+
+    public synchronized void setWaterLevel(int amount) {
+        waterLevel = amount;
     }
 
     public synchronized void stopWaterThread() {
