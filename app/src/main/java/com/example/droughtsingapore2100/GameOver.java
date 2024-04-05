@@ -1,9 +1,12 @@
 package com.example.droughtsingapore2100;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,6 +75,20 @@ public class GameOver extends AppCompatActivity {
             tvTop3.setText("-");
         }
 
+        if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            View decorView = getWindow().getDecorView();
+            // Hide the status bar.
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+            // Never show the action bar if the status bar is hidden, so hide that too if necessary.
+            ActionBar actionBar = getActionBar();
+            if(actionBar != null){
+                actionBar.hide();
+            }
+        }
     }
 
 
