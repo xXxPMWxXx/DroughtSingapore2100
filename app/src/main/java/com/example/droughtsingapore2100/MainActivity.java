@@ -5,10 +5,12 @@ import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
+    private GameView gameView; // Member variable to hold the GameView instance
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startGame(View view) {
-        GameView gameView = new GameView(this);
+        gameView = new GameView(this);
         // Set the layout to the GameView object
         setContentView(gameView);
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("MainActivity", "onPause() called");
+        super.onPause();
+        // Pause the background music when the activity is paused
+        if (gameView != null) {
+            gameView.pauseBackgroundMusic();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d("MainActivity", "onStop() called");
+        super.onStop();
+        // Pause the background music when the activity is stopped
+        if (gameView != null) {
+            gameView.pauseBackgroundMusic();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("MainActivity", "onResume() called");
+        super.onResume();
+        // Resume the background music when the activity is resumed
+        if (gameView != null) {
+            gameView.resumeBackgroundMusic();
+        }
     }
 }

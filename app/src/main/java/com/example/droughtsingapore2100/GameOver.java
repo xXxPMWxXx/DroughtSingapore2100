@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -23,6 +24,8 @@ public class GameOver extends AppCompatActivity {
     private DBUtils dbUtils;
     //declaring instance variables
     TextView tvPoints;
+    private GameView gameView; // Member variable to hold the GameView instance
+
 
     //Override the onCreate method of AppCompatActivity
     @Override
@@ -102,8 +105,9 @@ public class GameOver extends AppCompatActivity {
     // Define the restart method that is called when the restart button is clicked
     public void restart(View view) {
         // Start the GameView activity to start a new game
-        GameView gameView = new GameView(GameOver.this);
+        gameView = new GameView(GameOver.this);
         setContentView(gameView);
+
     }
 
     // Define the exit method that is called when the exit button is clicked
@@ -112,6 +116,37 @@ public class GameOver extends AppCompatActivity {
         Intent intent = new Intent(GameOver.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+
+    @Override
+    protected void onPause() {
+        Log.d("GameOver", "onPause() called");
+        super.onPause();
+        // Pause the background music when the activity is paused
+        if (gameView != null) {
+            gameView.pauseBackgroundMusic();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d("GameOver", "onStop() called");
+        super.onStop();
+        // Pause the background music when the activity is stopped
+        if (gameView != null) {
+            gameView.pauseBackgroundMusic();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("GameOver", "onResume() called");
+        super.onResume();
+        // Resume the background music when the activity is resumed
+        if (gameView != null) {
+            gameView.resumeBackgroundMusic();
+        }
     }
 
 }

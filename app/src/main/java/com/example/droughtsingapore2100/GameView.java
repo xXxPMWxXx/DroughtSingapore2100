@@ -129,6 +129,10 @@ public class GameView extends View{
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        Log.d("GameView", "onDetachedFromWindow() called");
+
+        // Stop the background music
+        stopBackgroundMusic();
         water.stopWaterThread();
         try {
             waterThread.join(); // Wait for the thread to finish
@@ -136,6 +140,8 @@ public class GameView extends View{
             e.printStackTrace();
         }
     }
+
+
 
     //create new Droplet object and add into 'droplets' Arraylist
     private void generateDroplet(){
@@ -391,6 +397,30 @@ public class GameView extends View{
         if (backgroundMediaPlayer == null) {
             Log.e("backgroundMediaPlayer", "Failed to create backgroundMediaPlayer.");
         } else {
+            backgroundMediaPlayer.start();
+        }
+    }
+
+    public void pauseBackgroundMusic() {
+        if (backgroundMediaPlayer != null && backgroundMediaPlayer.isPlaying()) {
+
+            Log.d("GameView", "pauseBackgroundMusic() called");
+
+            backgroundMediaPlayer.pause();
+        }
+    }
+
+    public void stopBackgroundMusic() {
+        Log.d("GameView", "stopBackgroundMusic() called");
+        if (backgroundMediaPlayer != null) {
+            backgroundMediaPlayer.stop();
+            backgroundMediaPlayer.release();
+            backgroundMediaPlayer = null;
+        }
+    }
+
+    public void resumeBackgroundMusic() {
+        if (backgroundMediaPlayer != null && !backgroundMediaPlayer.isPlaying()) {
             backgroundMediaPlayer.start();
         }
     }
