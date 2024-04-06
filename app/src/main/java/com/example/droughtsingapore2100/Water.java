@@ -12,18 +12,15 @@ public class Water {
     }
 
     public Thread startWaterThread() {
-        waterThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (isRunning) {
-                    try {
-                        Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
-                        if(waterLevel != 1) {
-                            decreaseWater(1); // Decrease water after the interval
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        waterThread = new Thread(() -> {
+            while (isRunning) {
+                try {
+                    Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
+                    if(waterLevel != 1) {
+                        decreaseWater(1); // Decrease water after the interval
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
