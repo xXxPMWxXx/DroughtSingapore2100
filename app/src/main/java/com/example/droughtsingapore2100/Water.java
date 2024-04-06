@@ -4,7 +4,6 @@ public class Water {
     private int waterLevel;
     private int maxWaterLevel = 10;
     private final long LIFE_DECREASE_INTERVAL = 5000; // Decrease water every 5 seconds
-    private Thread waterThread;
     private boolean isRunning = true;
 
     public Water(int initialWaterLevel) {
@@ -12,11 +11,13 @@ public class Water {
     }
 
     public Thread startWaterThread() {
-        waterThread = new Thread(() -> {
+        // Sleep for the interval
+        // Decrease water after the interval
+        Thread waterThread = new Thread(() -> {
             while (isRunning) {
                 try {
                     Thread.sleep(LIFE_DECREASE_INTERVAL); // Sleep for the interval
-                    if(waterLevel != 1) {
+                    if (getWaterLevel() > 1) {
                         decreaseWater(1); // Decrease water after the interval
                     }
                 } catch (InterruptedException e) {
@@ -33,7 +34,7 @@ public class Water {
         if(setWaterLevel(getWaterLevel() - amount) <= 0){
             setWaterLevel(0);
             // If water reaches 0, end the game
-            endGame();
+            stopWaterThread();
         }
     }
 
@@ -44,20 +45,18 @@ public class Water {
         }
     }
 
-    private void endGame() {
-        // Stop the water thread
-        isRunning = false;
-    }
-
+    //get water level synchronously
     public synchronized int getWaterLevel() {
         return waterLevel;
     }
 
+    //set and return water level synchronously
     private synchronized int setWaterLevel(int amount) {
         waterLevel = amount;
         return amount;
     }
 
+    //stop the current thread
     public synchronized void stopWaterThread() {
         isRunning = false;
     }

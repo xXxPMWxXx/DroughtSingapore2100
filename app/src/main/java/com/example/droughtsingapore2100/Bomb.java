@@ -25,19 +25,16 @@ public class Bomb {
 
     // returns bitmap object from the bomb array
     public Bitmap getBomb(int bombFrame){
-
         return bomb[bombFrame];
     }
 
     // returns width of the first bitmap object
     public int getBombWidth(){
-
         return bomb[0].getWidth();
     }
 
     // returns height of the first bitmap object
     public int getBombHeight(){
-
         return bomb[0].getHeight();
     }
 
